@@ -150,7 +150,7 @@ ticket8.save
 
 Screening.most_popular_film_showing
 
-customer1.buy_tickets([film1, film2], [screening1, screening2])
+# customer1.buy_tickets(film1, screening1)
 
 binding.pry
 nil

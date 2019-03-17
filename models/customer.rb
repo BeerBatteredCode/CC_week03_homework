@@ -6,13 +6,14 @@ require_relative('./screening.rb')
 class Customer
 
   attr_reader :id, :films_booked
-  attr_accessor :name, :funds
+  attr_accessor :name, :funds, :tickets_bought
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @name = options['name']
     @funds = options['funds'].to_i
     @films_booked = []
+    @tickets_bought = 0
   end
 
   def save
@@ -37,13 +38,14 @@ class Customer
     return Customer.map_items(customer_data)
   end
 
-  def buy_tickets(array_of_films, array_of_screenings)
-   array_of_films.each do |film|
-     @funds -= film.price
-     self.update
-     @films_booked << film
-   end
-   array_of_screenings.each { |screening| screening.book_ticket }
+  def buy_tickets(film, screening)
+   return "Sold out!" if screening.capacity == 0
+   return "Insufficient funds!" if @funds < film.price
+   screening.book_ticket()
+   @funds -= film.price
+   self.update()
+   @films_booked << film
+   @tickets_bought += 1
  end
 
   def delete
