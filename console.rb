@@ -73,7 +73,5 @@ ticket4.save
 # customer1.name = 'Rory the MC Gregor'
 # customer1.update
 
-
-
 binding.pry
 nil
