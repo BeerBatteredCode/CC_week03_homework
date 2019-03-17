@@ -5,13 +5,14 @@ require_relative('./screening.rb')
 
 class Customer
 
-  attr_reader :id
+  attr_reader :id, :films_booked
   attr_accessor :name, :funds
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @name = options['name']
-    @funds = options['funds']
+    @funds = options['funds'].to_i
+    @films_booked = []
   end
 
   def save
@@ -35,6 +36,15 @@ class Customer
     customer_data = SqlRunner.run(sql)
     return Customer.map_items(customer_data)
   end
+
+  def buy_tickets(array_of_films, array_of_screenings)
+   array_of_films.each do |film|
+     @funds -= film.price
+     self.update
+     @films_booked << film
+   end
+   array_of_screenings.each { |screening| screening.book_ticket }
+ end
 
   def delete
     sql = 'DELETE FROM customers WHERE id = $1'
